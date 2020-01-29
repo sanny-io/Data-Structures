@@ -1,9 +1,3 @@
-import sys
-sys.path.append('../queue_and_stack')
-from dll_queue import Queue
-from dll_stack import Stack
-
-
 class BinarySearchTree:
     def __init__(self, value):
         self.value = value
@@ -12,21 +6,53 @@ class BinarySearchTree:
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
-
+        if value < self.value: # go left!
+            if self.left:
+                self.left.insert(value)
+            else:
+                self.left = BinarySearchTree(value)
+        else: # go right!
+            if self.right:
+                self.right.insert(value)
+            else:
+                self.right = BinarySearchTree(value)
+    
     # Return True if the tree contains the value
     # False if it does not
-    def contains(self, target):
-        pass
+    def contains(self, value):
+        if value == self.value:
+            return True
+        
+        if value < self.value and self.left:
+            return self.left.contains(value)
+        
+        if self.right:
+            return self.right.contains(value)
+        
+        return False
 
     # Return the maximum value found in the tree
     def get_max(self):
-        pass
+        node = self.right
+
+        while node:
+            if node.right:
+                node = node.right
+            else:
+                break
+        
+        return node and node.value or self.value
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
-    def for_each(self, cb):
-        pass
+    def for_each(self, callback):
+        callback(self.value)
+
+        if self.left:
+            self.left.for_each(callback)
+        
+        if self.right:
+            self.right.for_each(callback)
 
     # DAY 2 Project -----------------------
 
@@ -55,3 +81,6 @@ class BinarySearchTree:
     # Print Post-order recursive DFT
     def post_order_dft(self, node):
         pass
+
+    def __repr__(self):
+        return str(self.value)
